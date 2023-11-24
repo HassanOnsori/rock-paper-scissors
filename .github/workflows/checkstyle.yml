@@ -19,8 +19,3 @@ jobs:
       - name: Run Prettier
         run: npx prettier --check .
 
-      - name: Upload Report as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: code-style-report
-          path: prettier-report.html
