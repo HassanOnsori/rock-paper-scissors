@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react'
-import styled from 'styled-components'
-import Token from './token'
-import { WhiteButton } from './button'
-import { ScoreContext } from './App'
+import React, { useState, useContext } from "react";
+import styled from "styled-components";
+import Token from "./token";
+import { WhiteButton } from "./button";
+import { ScoreContext } from "./App";
 
 const TableStyled = styled.div`
   display: grid;
@@ -18,7 +18,7 @@ const TableStyled = styled.div`
   .in-game {
     text-align: center;
     text-transform: uppercase;
-    font-size: .8em;
+    font-size: 0.8em;
     font-weight: 700;
     letter-spacing: 1px;
   }
@@ -31,16 +31,16 @@ const TableStyled = styled.div`
     }
   }
   .line {
-    display: ${({ playing }) => !playing ? 'block' : 'none'};
+    display: ${({ playing }) => (!playing ? "block" : "none")};
     height: 14px;
-    background: rgba(0,0,0,.2);
+    background: rgba(0, 0, 0, 0.2);
     position: absolute;
     width: 200px;
     top: 58px;
     &:before {
-      content: '';
+      content: "";
       height: 14px;
-      background: rgba(0,0,0,.2);
+      background: rgba(0, 0, 0, 0.2);
       position: absolute;
       left: 0;
       right: 0;
@@ -50,9 +50,9 @@ const TableStyled = styled.div`
     }
 
     &:after {
-      content: '';
+      content: "";
       height: 14px;
-      background: rgba(0,0,0,.2);
+      background: rgba(0, 0, 0, 0.2);
       position: absolute;
       left: 0;
       right: 0;
@@ -63,10 +63,12 @@ const TableStyled = styled.div`
   }
   @media screen and (min-width: 1024px) {
     grid-template-columns: 300px 300px;
-    ${({ playing, results }) => (playing && results) && 'grid-template-columns: 300px 110px 110px 300px;'}
+    ${({ playing, results }) =>
+      playing && results && "grid-template-columns: 300px 110px 110px 300px;"}
 
     & div:nth-of-type(3) {
-      ${({ playing, results }) => (playing && results) && 'grid-column: 2 / 4; grid-row: 1;'}
+      ${({ playing, results }) =>
+        playing && results && "grid-column: 2 / 4; grid-row: 1;"}
     }
     .line {
       width: 300px;
@@ -91,117 +93,117 @@ const TableStyled = styled.div`
       }
     }
   }
-`
-const elements = [
-  'paper',
-  'scissors',
-  'rock',
-]
+`;
+const elements = ["paper", "scissors", "rock"];
 function Table() {
   // const [score, setScore] = useState(0)
-  const { score, setScore } = useContext(ScoreContext)
-  const [results, setResults] = useState('')
-  const [housePick, setHousePick] = useState('default')
-  const [playing, setPlaying] = useState(false)
-  const [pick, setPick] = useState('')
+  const { score, setScore } = useContext(ScoreContext);
+  const [results, setResults] = useState("");
+  const [housePick, setHousePick] = useState("default");
+  const [playing, setPlaying] = useState(false);
+  const [pick, setPick] = useState("");
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
   }
   function launchHousePick() {
     return new Promise((resolve, reject) => {
-      let pick
+      let pick;
       const interval = setInterval(() => {
-        pick = elements[getRandomInt(0, 3)]
-        setHousePick(pick)
-      }, 75)
+        pick = elements[getRandomInt(0, 3)];
+        setHousePick(pick);
+      }, 75);
       setTimeout(() => {
-        clearInterval(interval)
-        resolve(pick)
-      }, 2000)
-    })
+        clearInterval(interval);
+        resolve(pick);
+      }, 2000);
+    });
   }
   async function onClick(name) {
-    setPlaying(true)
-    setPick(name)
-    const house = await launchHousePick()
+    setPlaying(true);
+    setPick(name);
+    const house = await launchHousePick();
     // console.log(house)
     // console.log('la casa eligió ', house)
-    const results = playWithIA(name, house)
-    setResults(results)
-    if (results === 'win') {
-      setScore(score + 1)
+    const results = playWithIA(name, house);
+    setResults(results);
+    if (results === "win") {
+      setScore(score + 1);
     }
   }
   function playWithIA(pick, housePick) {
     if (housePick === pick) {
-      return 'draw'
+      return "draw";
     }
-    if (pick === 'paper') {
-      if (housePick === 'scissors') {
-        return 'lose'
+    if (pick === "paper") {
+      if (housePick === "scissors") {
+        return "lose";
       }
-      if (housePick === 'rock') {
-        return 'win'
-      }
-    }
-    if (pick === 'scissors') {
-      if (housePick === 'paper') {
-        return 'win'
-      }
-      if (housePick === 'rock') {
-        return 'lose'
+      if (housePick === "rock") {
+        return "win";
       }
     }
-    if (pick === 'rock') {
-      if (housePick === 'paper') {
-        return 'lose'
+    if (pick === "scissors") {
+      if (housePick === "paper") {
+        return "win";
       }
-      if (housePick === 'scissors') {
-        return 'win'
+      if (housePick === "rock") {
+        return "lose";
+      }
+    }
+    if (pick === "rock") {
+      if (housePick === "paper") {
+        return "lose";
+      }
+      if (housePick === "scissors") {
+        return "win";
       }
     }
   }
   function handleTryAgainClick() {
-    setPlaying(false)
-    setResults('')
+    setPlaying(false);
+    setResults("");
   }
   return (
-    <TableStyled playing={playing} results={(results !== '')}>
+    <TableStyled playing={playing} results={results !== ""}>
       <span className="line"></span>
-      {
-        !playing ? (
-          <>
-            <Token name="paper" onClick={onClick} />
-            <Token name="scissors" onClick={onClick} />
-            <Token name="rock" onClick={onClick} />
-          </>
-        ) : (
-            <>
-              <div className="in-game">
-                <Token playing={playing} name={pick} isShadowAnimated={(results === 'win')} />
-                <p>You Picked</p>
-              </div>
-              <div className="in-game">
-                <Token playing={playing} name={housePick} isShadowAnimated={(results === 'lose')} />
-                <p>The house Picked</p>
-              </div>
-              <div className="results">
-                {
-                  results && (
-                    <>
-                      <h2>YOU {results}</h2>
-                      <WhiteButton onClick={handleTryAgainClick}>
-                        Try Again
-                      </WhiteButton>
-                    </>
-                  )
-                }
-              </div>
-            </>
-          )
-      }
+      {!playing ? (
+        <>
+          <Token name="paper" onClick={onClick} />
+          <Token name="scissors" onClick={onClick} />
+          <Token name="rock" onClick={onClick} />
+        </>
+      ) : (
+        <>
+          <div className="in-game">
+            <Token
+              playing={playing}
+              name={pick}
+              isShadowAnimated={results === "win"}
+            />
+            <p>You Picked</p>
+          </div>
+          <div className="in-game">
+            <Token
+              playing={playing}
+              name={housePick}
+              isShadowAnimated={results === "lose"}
+            />
+            <p>The house Picked</p>
+          </div>
+          <div className="results">
+            {results && (
+              <>
+                <h2>YOU {results}</h2>
+                <WhiteButton onClick={handleTryAgainClick}>
+                  Try Again
+                </WhiteButton>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </TableStyled>
-  )
+  );
 }
 
-export default Table
+export default Table;

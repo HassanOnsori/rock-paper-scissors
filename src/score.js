@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components'
-import { ScoreContext } from './App'
+import React, { useContext } from "react";
+import styled from "styled-components";
+import { ScoreContext } from "./App";
 
 const ScoreStyled = styled.div`
   background: white;
@@ -9,7 +9,7 @@ const ScoreStyled = styled.div`
   border-radius: 8px;
   width: 80px;
   small {
-    color: #2A45C2;
+    color: #2a45c2;
     text-transform: uppercase;
     font-size: 10px;
     font-weight: bold;
@@ -31,16 +31,16 @@ const ScoreStyled = styled.div`
       font-size: 60px;
     }
   }
-`
+`;
 
 function Score() {
-  const { score } = useContext(ScoreContext)
+  const { score } = useContext(ScoreContext);
   return (
     <ScoreStyled>
       <small>Score</small>
       <p>{score}</p>
     </ScoreStyled>
-  )
+  );
 }
 
-export default Score
+export default Score;
