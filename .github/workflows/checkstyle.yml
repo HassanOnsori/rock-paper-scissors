@@ -19,3 +19,12 @@ jobs:
       - name: Run Prettier
         run: npx prettier --write .
 
+      - name: Run ESLint
+        run: |
+          npx eslint . --format=html --output-file eslint-report.html
+
+      - name: Upload ESLint Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: eslint-report
+          path: eslint-report.html
