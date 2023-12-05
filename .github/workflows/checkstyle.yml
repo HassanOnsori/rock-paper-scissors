@@ -1,4 +1,4 @@
-name: Code-Style Check
+name: Code Style Check
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
         id: prettier
         run: |
           result=$(npx prettier --check .)
-          if [ "$result" != "" ]; then
+          if [ $? -ne 0 ]; then
             echo "Prettier found code style issues. Please run 'npx prettier --write .' locally to fix them."
             exit 1
           fi
