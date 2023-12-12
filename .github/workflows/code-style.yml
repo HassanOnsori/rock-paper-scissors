@@ -1,7 +1,9 @@
 name: Code Style Check
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
 
@@ -20,18 +22,26 @@ jobs:
         id: prettier
         run: |
           result=$(npx prettier --check .)
-          if [ "$result" != "" ]; then
+          if [ $? -ne 0 ]; then
             echo "Prettier found code style issues. Please run 'npx prettier --write .' locally to fix them."
             exit 1
           fi
 
       - name: Run ESLint
-        if: steps.prettier.outcome == 'success'
+        if: |
+          steps.prettier.outcome == 'success' &&
+          github.event_name == 'pull_request' &&
+          github.event.action == 'closed' &&
+          github.event.pull_request.merged == true
         run: |
           npx eslint . --format=html --output-file eslint-report.html
 
       - name: Upload ESLint Report
-        if: steps.prettier.outcome == 'success'
+        if: |
+          steps.prettier.outcome == 'success' &&
+          github.event_name == 'pull_request' &&
+          github.event.action == 'closed' &&
+          github.event.pull_request.merged == true
         uses: actions/upload-artifact@v3
         with:
           name: eslint-report
